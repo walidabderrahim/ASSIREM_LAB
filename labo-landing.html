@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Laboratoire d'Analyses Médicales – Prélèvements & Soins à Domicile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --blue-deep:  #0D4F8C;
+    --blue-mid:   #1A6BBF;
+    --blue-light: #3D8FD4;
+    --blue-pale:  #EBF4FF;
+    --cyan:       #39C6CF;
+    --green-soft: #32B07A;
+    --green-pale: #E8F8F2;
+    --gray-100:   #F7F9FC;
+    --gray-200:   #EDF1F7;
+    --gray-400:   #9BAFC8;
+    --gray-700:   #3D5166;
+    --white:      #FFFFFF;
+    --shadow-sm:  0 2px 12px rgba(13,79,140,.08);
+    --shadow-md:  0 8px 32px rgba(13,79,140,.13);
+    --shadow-lg:  0 16px 56px rgba(13,79,140,.18);
+    --radius:     18px;
+    --radius-sm:  10px;
+    --transition: .3s cubic-bezier(.4,0,.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: var(--gray-700);
+    background: var(--white);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--blue-mid), var(--cyan));
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .logo-icon svg { width: 24px; height: 24px; fill: white; }
+  .logo-text { font-size: 1rem; font-weight: 700; color: var(--blue-deep); line-height: 1.1; }
+  .logo-text span { display: block; font-size: .65rem; font-weight: 400; color: var(--gray-400); letter-spacing: .04em; }
+  .header-call {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--blue-deep); color: white;
+    border: none; border-radius: 50px; padding: 10px 18px;
+    font-family: 'Sora', sans-serif; font-size: .82rem; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    box-shadow: 0 4px 14px rgba(13,79,140,.35); transition: var(--transition);
+  }
+  .header-call:hover { background: var(--blue-mid); transform: translateY(-1px); }
+  .header-call svg { width: 16px; height: 16px; fill: white; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, var(--blue-pale) 0%, var(--white) 60%);
+    padding: 36px 20px 0; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -80px; right: -80px;
+    width: 320px; height: 320px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(57,198,207,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--green-pale); color: var(--green-soft);
+    border-radius: 50px; padding: 5px 14px;
+    font-size: .72rem; font-weight: 600; letter-spacing: .05em;
+    margin-bottom: 16px; animation: fadeUp .6s both;
+  }
+  .hero-label::before { content: '●'; font-size: .5rem; animation: pulse 1.8s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.9rem, 7vw, 2.8rem); line-height: 1.15;
+    color: var(--blue-deep); margin-bottom: 14px; animation: fadeUp .6s .1s both;
+  }
+  .hero h1 em { font-style: italic; color: var(--cyan); }
+  .hero-sub {
+    font-size: .92rem; color: var(--gray-400); line-height: 1.6;
+    margin-bottom: 28px; animation: fadeUp .6s .2s both;
+  }
+  .cta-group {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-bottom: 32px; animation: fadeUp .6s .3s both;
+  }
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    border: none; border-radius: 50px; padding: 16px 24px;
+    font-family: 'Sora', sans-serif; font-size: .95rem; font-weight: 600;
+    cursor: pointer; text-decoration: none; width: 100%;
+    transition: var(--transition); position: relative; overflow: hidden;
+  }
+  .btn::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.15); opacity: 0; transition: var(--transition); }
+  .btn:active::after { opacity: 1; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-deep));
+    color: white; box-shadow: 0 6px 20px rgba(13,79,140,.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(13,79,140,.4); }
+  .btn-primary svg { fill: white; width: 20px; height: 20px; animation: ring 2.5s infinite; }
+  .btn-secondary {
+    background: white; color: var(--blue-mid);
+    border: 2px solid var(--blue-light); box-shadow: var(--shadow-sm);
+  }
+  .btn-secondary:hover { background: var(--blue-pale); transform: translateY(-2px); }
+  .btn-secondary svg { fill: var(--blue-mid); width: 20px; height: 20px; }
+  @keyframes ring {
+    0%,100%{ transform: rotate(0deg); }
+    10%{ transform: rotate(-15deg); }
+    20%{ transform: rotate(15deg); }
+    30%{ transform: rotate(0deg); }
+  }
+  .hero-img {
+    margin: 0; height: 350px; border-radius: 20px;
+    background: linear-gradient(135deg, var(--blue-pale) 0%, var(--gray-200) 100%);
+    position: relative; overflow: hidden; animation: fadeUp .6s .4s both;
+    box-shadow: 0 8px 32px rgba(13,79,140,.15);
+  }
+  .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* ── BADGES ── */
+  .badges {
+    padding: 20px; display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+    animation: fadeUp .6s .5s both;
+  }
+  .badge {
+    background: white; border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200);
+    padding: 14px 8px; display: flex; flex-direction: column; align-items: center;
+    gap: 6px; text-align: center; transition: var(--transition);
+  }
+  .badge:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .badge-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .badge-icon svg { width: 20px; height: 20px; }
+  .badge-icon.blue { background: var(--blue-pale); } .badge-icon.blue svg { fill: var(--blue-mid); }
+  .badge-icon.green { background: var(--green-pale); } .badge-icon.green svg { fill: var(--green-soft); }
+  .badge-icon.cyan { background: #E8FAFB; } .badge-icon.cyan svg { fill: var(--cyan); }
+  .badge-name { font-size: .72rem; font-weight: 600; color: var(--gray-700); }
+  .badge-desc { font-size: .62rem; color: var(--gray-400); }
+
+  /* ── SECTIONS ── */
+  section { padding: 40px 20px; }
+  section:nth-child(even) { background: var(--gray-100); }
+  .section-label {
+    display: inline-block; font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--cyan); margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif; font-size: clamp(1.4rem, 5vw, 2rem);
+    color: var(--blue-deep); line-height: 1.2; margin-bottom: 10px;
+  }
+  .section-sub { font-size: .88rem; color: var(--gray-400); line-height: 1.6; margin-bottom: 28px; }
+
+  /* ── WHY US ── */
+  .why-cards { display: flex; flex-direction: column; gap: 14px; }
+  .why-card {
+    background: white; border-radius: var(--radius); border: 1px solid var(--gray-200);
+    padding: 20px; display: flex; gap: 16px; align-items: flex-start;
+    box-shadow: var(--shadow-sm); transition: var(--transition);
+    opacity: 0; transform: translateY(20px);
+  }
+  .why-card.visible { opacity: 1; transform: translateY(0); }
+  .why-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .why-card-icon { width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .why-card-icon svg { width: 24px; height: 24px; }
+  .wc-blue { background: var(--blue-pale); } .wc-blue svg { fill: var(--blue-mid); }
+  .wc-green { background: var(--green-pale); } .wc-green svg { fill: var(--green-soft); }
+  .wc-cyan { background: #E8FAFB; } .wc-cyan svg { fill: var(--cyan); }
+  .wc-purple { background: #F0EEFF; } .wc-purple svg { fill: #7C5CBF; }
+  .why-card-body h3 { font-size: .95rem; font-weight: 600; color: var(--blue-deep); margin-bottom: 4px; }
+  .why-card-body p { font-size: .82rem; color: var(--gray-400); line-height: 1.6; }
+
+  /* ── SERVICES ── */
+  .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .service-card {
+    background: white; border-radius: var(--radius); border: 1px solid var(--gray-200);
+    padding: 20px 14px; display: flex; flex-direction: column; align-items: center;
+    gap: 10px; text-align: center; box-shadow: var(--shadow-sm); transition: var(--transition);
+    opacity: 0; transform: translateY(20px);
+  }
+  .service-card.visible { opacity: 1; transform: translateY(0); }
+  .service-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .service-icon {
+    width: 52px; height: 52px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--blue-pale), #D4ECFF);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .service-icon svg { width: 26px; height: 26px; fill: var(--blue-mid); }
+  .service-card h4 { font-size: .85rem; font-weight: 600; color: var(--blue-deep); }
+  .service-card p { font-size: .73rem; color: var(--gray-400); line-height: 1.5; }
+
+  /* ── HOW IT WORKS ── */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--gray-200);
+    opacity: 0; transform: translateX(-20px); transition: opacity .5s, transform .5s;
+  }
+  .step:last-child { border-bottom: none; }
+  .step.visible { opacity: 1; transform: translateX(0); }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-deep));
+    color: white; font-size: .9rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(13,79,140,.3);
+  }
+  .step-body h4 { font-size: .9rem; font-weight: 600; color: var(--blue-deep); margin-bottom: 4px; }
+  .step-body p { font-size: .8rem; color: var(--gray-400); line-height: 1.5; }
+
+  /* ══════════════════════════════════════
+     ── FORM PREMIUM ──
+  ══════════════════════════════════════ */
+  #rdv {
+    background: linear-gradient(145deg, #0a3d6e 0%, var(--blue-deep) 50%, #0e5a9e 100%);
+    position: relative; overflow: hidden;
+  }
+  #rdv::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(57,198,207,.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  #rdv::after {
+    content: ''; position: absolute; bottom: -80px; left: -80px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(50,176,122,.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  #rdv .section-label { color: var(--cyan); }
+  #rdv .section-title { color: white; }
+  #rdv .section-sub { color: rgba(255,255,255,.55); }
+
+  /* Carte formulaire */
+  .form-card {
+    background: white; border-radius: 24px;
+    box-shadow: 0 24px 64px rgba(0,0,0,.28);
+    overflow: hidden; position: relative; z-index: 1;
+  }
+
+  /* Barre colorée en haut */
+  .form-card-header {
+    background: linear-gradient(135deg, var(--blue-mid), var(--cyan));
+    padding: 22px 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .form-card-header-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: rgba(255,255,255,.2);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .form-card-header-icon svg { width: 26px; height: 26px; fill: white; }
+  .form-card-header-text h3 {
+    font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: white; line-height: 1.2;
+  }
+  .form-card-header-text p { font-size: .75rem; color: rgba(255,255,255,.75); margin-top: 3px; }
+
+  /* Corps du formulaire */
+  .form-body { padding: 24px 22px 22px; }
+
+  /* Séparateur de section form */
+  .form-section-title {
+    font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--cyan);
+    margin-bottom: 14px; margin-top: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .form-section-title:first-child { margin-top: 0; }
+  .form-section-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--gray-200);
+  }
+
+  /* Grid 2 colonnes */
+  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Groupe champ */
+  .fg { margin-bottom: 14px; }
+  .fg label {
+    display: block; font-size: .74rem; font-weight: 600;
+    color: var(--gray-700); margin-bottom: 6px;
+  }
+  .fg label span { color: #ef4444; margin-left: 2px; }
+  .input-box { position: relative; }
+  .input-box svg.fi {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    width: 17px; height: 17px; fill: var(--gray-400); pointer-events: none;
+    transition: fill .2s;
+  }
+  .input-box input {
+    width: 100%; padding: 13px 14px 13px 40px;
+    border: 1.5px solid var(--gray-200); border-radius: 12px;
+    font-family: 'Sora', sans-serif; font-size: .88rem; color: var(--gray-700);
+    background: var(--gray-100); outline: none; transition: var(--transition);
+  }
+  .input-box input::placeholder { color: var(--gray-400); font-size: .83rem; }
+  .input-box input:focus {
+    border-color: var(--blue-light); background: white;
+    box-shadow: 0 0 0 4px rgba(61,143,212,.1);
+  }
+  .input-box input:focus + svg.fi { fill: var(--blue-mid); }
+
+  /* Custom dropdown service */
+  #f-service { display: none; }
+  .cs-wrap { position: relative; }
+  .cs-trigger {
+    width: 100%; padding: 13px 40px 13px 40px;
+    border: 1.5px solid var(--gray-200); border-radius: 12px;
+    font-family: 'Sora', sans-serif; font-size: .88rem;
+    background: var(--gray-100); cursor: pointer;
+    display: flex; align-items: center;
+    transition: var(--transition); user-select: none;
+    position: relative;
+  }
+  .cs-trigger.placeholder { color: var(--gray-400); font-size: .83rem; }
+  .cs-trigger.has-val { color: var(--gray-700); }
+  .cs-trigger:hover, .cs-wrap.open .cs-trigger {
+    border-color: var(--blue-light); background: white;
+    box-shadow: 0 0 0 4px rgba(61,143,212,.1);
+  }
+  .cs-left-icon {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    width: 17px; height: 17px; fill: var(--gray-400); pointer-events: none;
+  }
+  .cs-wrap.open .cs-left-icon, .cs-wrap.has-val .cs-left-icon { fill: var(--blue-mid); }
+  .cs-arrow {
+    position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; fill: var(--gray-400);
+    transition: transform .22s ease; pointer-events: none;
+  }
+  .cs-wrap.open .cs-arrow { transform: translateY(-50%) rotate(180deg); }
+  .cs-dropdown {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+    background: white; border: 1.5px solid var(--gray-200); border-radius: 14px;
+    box-shadow: 0 12px 40px rgba(13,79,140,.18); z-index: 50; overflow: hidden;
+    opacity: 0; transform: translateY(-6px); pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .cs-wrap.open .cs-dropdown { opacity: 1; transform: translateY(0); pointer-events: all; }
+  .cs-opt {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 16px; cursor: pointer; transition: background .12s;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .cs-opt:last-child { border-bottom: none; }
+  .cs-opt:hover { background: var(--blue-pale); }
+  .cs-opt.picked { background: var(--blue-pale); }
+  .cs-opt-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; flex-shrink: 0;
+  }
+  .cs-opt-lbl { font-size: .86rem; font-weight: 600; color: var(--gray-700); }
+  .cs-opt-sub { font-size: .71rem; color: var(--gray-400); margin-top: 1px; }
+
+  /* Bouton submit WhatsApp */
+  .btn-wa {
+    width: 100%; margin-top: 6px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    border: none; border-radius: 50px; padding: 17px 24px;
+    font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer;
+    background: linear-gradient(135deg, #25d366, #1da851);
+    color: white; box-shadow: 0 8px 24px rgba(37,211,102,.4);
+    transition: var(--transition);
+  }
+  .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(37,211,102,.5); }
+  .btn-wa:active { transform: scale(.98); }
+  .btn-wa svg { fill: white; width: 22px; height: 22px; }
+
+  .form-security {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin-top: 14px; font-size: .71rem; color: var(--gray-400); text-align: center;
+  }
+  .form-security svg { width: 13px; height: 13px; fill: var(--green-soft); flex-shrink: 0; }
+
+  /* ── MAPS ── */
+  .maps-section { background: var(--gray-100); padding: 40px 20px; }
+  .maps-section .section-label { color: var(--cyan); }
+  .maps-wrapper {
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 8px 32px rgba(13,79,140,.15);
+    border: 3px solid white;
+    position: relative;
+  }
+  .maps-wrapper iframe {
+    width: 100%; height: 280px; display: block; border: none;
+  }
+  /* Infos labo sous la carte */
+  .maps-info {
+    background: white; padding: 18px 20px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .maps-info-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: .83rem; color: var(--gray-700);
+  }
+  .maps-info-row svg { width: 18px; height: 18px; fill: var(--blue-mid); flex-shrink: 0; }
+  .maps-info-row a { color: var(--blue-mid); text-decoration: none; font-weight: 600; }
+  .maps-info-row a:hover { text-decoration: underline; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--blue-deep); color: rgba(255,255,255,.7);
+    padding: 40px 20px 100px;
+  }
+  .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .footer-logo-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: rgba(255,255,255,.12);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .footer-logo-icon svg { width: 22px; height: 22px; fill: white; }
+  .footer-logo-name { font-size: .95rem; font-weight: 700; color: white; }
+  .footer-desc { font-size: .82rem; line-height: 1.7; margin-bottom: 24px; }
+  .footer-links { display: flex; flex-direction: column; gap: 12px; }
+  .footer-link {
+    display: flex; align-items: center; gap: 10px;
+    font-size: .83rem; color: rgba(255,255,255,.65);
+    text-decoration: none; transition: var(--transition);
+  }
+  .footer-link:hover { color: white; }
+  .footer-link svg { width: 16px; height: 16px; fill: var(--cyan); flex-shrink: 0; }
+  .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,.1); margin: 24px 0; }
+  .footer-copy { font-size: .72rem; color: rgba(255,255,255,.4); text-align: center; }
+
+  /* ── STICKY CTA ── */
+  .sticky-cta {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+    padding: 14px 16px;
+    background: rgba(255,255,255,.97); backdrop-filter: blur(12px);
+    border-top: 1px solid var(--gray-200); box-shadow: 0 -8px 32px rgba(13,79,140,.12);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .sticky-btn {
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    border: none; border-radius: 50px; padding: 13px 12px;
+    font-family: 'Sora', sans-serif; font-size: .82rem; font-weight: 600;
+    cursor: pointer; text-decoration: none; transition: var(--transition);
+  }
+  .sticky-btn svg { width: 18px; height: 18px; }
+  .sticky-call { background: var(--blue-deep); color: white; box-shadow: 0 4px 14px rgba(13,79,140,.35); }
+  .sticky-call svg { fill: white; }
+  .sticky-rdv  { background: var(--green-soft); color: white; box-shadow: 0 4px 14px rgba(50,176,122,.35); }
+  .sticky-rdv svg { fill: white; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px);
+    background: var(--green-soft); color: white;
+    padding: 12px 24px; border-radius: 50px; font-size: .85rem; font-weight: 600;
+    z-index: 999; transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+    display: flex; align-items: center; gap: 8px; white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(50,176,122,.4);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast svg { width: 18px; height: 18px; fill: white; }
+
+  @media (min-width: 600px) {
+    .cta-group { flex-direction: row; }
+    .services-grid { grid-template-columns: repeat(3, 1fr); }
+    .sticky-cta { max-width: 480px; left: 50%; transform: translateX(-50%); }
+    .maps-wrapper iframe { height: 380px; }
+  }
+  @media (min-width: 900px) {
+    .sticky-cta { display: none; }
+    footer { padding-bottom: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+  Redirection vers WhatsApp…
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+<img src="image.png" alt="Labo Médical" style="height: 44px; width: auto; object-fit: contain; border-radius: 8px;"/>
+</div>
+  <a href="tel:0541875077" class="header-call">
+    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+    Appeler
+  </a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">🏥 Service Premium à Domicile</div>
+  <h1>Prélèvements &amp; Soins<br/><em>à Domicile</em></h1>
+  <p class="hero-sub">Service rapide, professionnel avec déplacement gratuit chez vous. Résultats fiables, équipe certifiée.</p>
+  <div class="cta-group">
+    <a href="tel:0541875077" class="btn btn-primary">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      Appeler Maintenant
+    </a>
+    <a href="#rdv" class="btn btn-secondary">
+      <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+      Prendre Rendez-vous
+    </a>
+  </div>
+  <div class="hero-img">
+    <img src="logo.jpg" alt="Photo du Laboratoire"/>
+  </div>
+</section>
+
+<!-- BADGES -->
+<div class="badges">
+  <div class="badge">
+    <div class="badge-icon blue">
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+    </div>
+    <div class="badge-name">Professionnel</div>
+    <div class="badge-desc">Équipe certifiée</div>
+  </div>
+  <div class="badge">
+    <div class="badge-icon green">
+      <svg viewBox="0 0 24 24"><path d="M13 2.05V4.05C17.39 4.59 20.5 8.58 19.96 12.97C19.5 16.61 16.64 19.5 13 19.93V21.93C18.5 21.38 22.5 16.5 21.95 11C21.5 6.25 17.73 2.5 13 2.05M11 2.06C9.05 2.25 7.19 3 5.67 4.26L7.1 5.74C8.22 4.84 9.57 4.26 11 4.06V2.06M4.26 5.67C3 7.19 2.25 9.04 2.05 11H4.05C4.24 9.58 4.8 8.23 5.69 7.1L4.26 5.67M2.06 13C2.26 14.96 3.03 16.81 4.27 18.33L5.69 16.9C4.81 15.77 4.24 14.42 4.06 13H2.06M7.06 18.37L5.67 19.74C7.18 21 9.04 21.79 11 22V20C9.58 19.82 8.23 19.25 7.06 18.37M12 7L10.5 10.5L7 12L10.5 13.5L12 17L13.5 13.5L17 12L13.5 10.5L12 7Z"/></svg>
+    </div>
+    <div class="badge-name">Rapide</div>
+    <div class="badge-desc">Résultats express</div>
+  </div>
+  <div class="badge">
+    <div class="badge-icon cyan">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    </div>
+    <div class="badge-name">Gratuit</div>
+    <div class="badge-desc">Déplacement offert</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section>
+  <div class="section-label">NOS SERVICES</div>
+  <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+  <p class="section-sub">Des prestations complètes réalisées par des professionnels de santé qualifiés.</p>
+  <div class="services-grid">
+    <div class="service-card scroll-reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M19.8 18.4L14 10.67V6.5l1.35-1.69c.26-.33.03-.81-.39-.81H9.04c-.42 0-.65.48-.39.81L10 6.5v4.17L4.2 18.4c-.49.66-.02 1.6.8 1.6h14c.82 0 1.29-.94.8-1.6z"/></svg></div>
+      <h4>Prise de Sang</h4>
+      <p>Prélèvement sanguin à domicile par infirmier diplômé</p>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M10.5 2h3l.5 5h-4l.5-5zM5 7h14l-1 10H6L5 7zm7 2a3 3 0 100 6 3 3 0 000-6z"/></svg></div>
+      <h4>Soins Infirmiers</h4>
+      <p>Injections, pansements et soins à votre domicile</p>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 100 10A5 5 0 0012 2zM2 20c0-4 4.5-7 10-7s10 3 10 7H2z"/></svg></div>
+      <h4>Bilan Complet</h4>
+      <p>Glycémie, cholestérol, NFS et plus encore</p>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></div>
+      <h4>Personnes Âgées</h4>
+      <p>Service dédié avec accompagnement bienveillant</p>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg></div>
+      <h4>Conseil Médical</h4>
+      <p>Orientation et conseils sur vos analyses</p>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg></div>
+      <h4>Urgences</h4>
+      <p>Intervention rapide en cas de besoin urgent</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section>
+  <div class="section-label">POURQUOI NOUS CHOISIR</div>
+  <h2 class="section-title">Votre santé, notre priorité</h2>
+  <p class="section-sub">Ce qui nous distingue des autres laboratoires.</p>
+  <div class="why-cards">
+    <div class="why-card scroll-reveal">
+      <div class="why-card-icon wc-blue"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg></div>
+      <div class="why-card-body">
+        <h3>Personnel qualifié &amp; certifié</h3>
+        <p>Toute notre équipe est composée de professionnels de santé diplômés avec des années d'expérience.</p>
+      </div>
+    </div>
+    <div class="why-card scroll-reveal">
+      <div class="why-card-icon wc-green"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg></div>
+      <div class="why-card-body">
+        <h3>Déplacement 100% gratuit</h3>
+        <p>Nous venons chez vous sans frais de déplacement, quelle que soit votre adresse dans notre zone.</p>
+      </div>
+    </div>
+    <div class="why-card scroll-reveal">
+      <div class="why-card-icon wc-cyan"><svg viewBox="0 0 24 24"><path d="M13 2.05V4.05C17.39 4.59 20.5 8.58 19.96 12.97C19.5 16.61 16.64 19.5 13 19.93V21.93C18.5 21.38 22.5 16.5 21.95 11C21.5 6.25 17.73 2.5 13 2.05M11 2.06C9.05 2.25 7.19 3 5.67 4.26L7.1 5.74C8.22 4.84 9.57 4.26 11 4.06V2.06M4.26 5.67C3 7.19 2.25 9.04 2.05 11H4.05C4.24 9.58 4.8 8.23 5.69 7.1L4.26 5.67M2.06 13C2.26 14.96 3.03 16.81 4.27 18.33L5.69 16.9C4.81 15.77 4.24 14.42 4.06 13H2.06M7.06 18.37L5.67 19.74C7.18 21 9.04 21.79 11 22V20C9.58 19.82 8.23 19.25 7.06 18.37M12 7L10.5 10.5L7 12L10.5 13.5L12 17L13.5 13.5L17 12L13.5 10.5L12 7Z"/></svg></div>
+      <div class="why-card-body">
+        <h3>Résultats rapides</h3>
+        <p>Recevez vos résultats rapidement avec une communication claire et compréhensible.</p>
+      </div>
+    </div>
+    <div class="why-card scroll-reveal">
+      <div class="why-card-icon wc-purple"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
+      <div class="why-card-body">
+        <h3>Disponible 7j/7</h3>
+        <p>Notre service est disponible tous les jours pour répondre à vos besoins de santé à tout moment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="section-label">COMMENT ÇA MARCHE</div>
+  <h2 class="section-title">En 3 étapes simples</h2>
+  <p class="section-sub">Réserver un soin à domicile n'a jamais été aussi facile.</p>
+  <div class="steps">
+    <div class="step scroll-reveal-left">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Réservez en ligne ou par téléphone</h4>
+        <p>Remplissez notre formulaire ou appelez-nous directement. Nous confirmons votre créneau en quelques minutes.</p>
+      </div>
+    </div>
+    <div class="step scroll-reveal-left">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Notre professionnel se déplace chez vous</h4>
+        <p>Un infirmier ou technicien qualifié arrive à l'heure convenue avec tout le matériel nécessaire.</p>
+      </div>
+    </div>
+    <div class="step scroll-reveal-left">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>Recevez vos résultats rapidement</h4>
+        <p>Vos résultats vous sont transmis dans les meilleurs délais avec explications claires.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FORMULAIRE RDV — VERSION PREMIUM
+══════════════════════════════════ -->
+<section id="rdv">
+  <div class="section-label">RÉSERVATION</div>
+  <h2 class="section-title">Prendre un Rendez-vous</h2>
+  <p class="section-sub">Remplissez le formulaire et nous vous contactons immédiatement.</p>
+
+  <div class="form-card">
+
+    <!-- En-tête coloré -->
+    <div class="form-card-header">
+      <div class="form-card-header-icon">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.42A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+      </div>
+      <div class="form-card-header-text">
+        <h3>Envoi direct via WhatsApp</h3>
+        <p>Réponse garantie dans les plus brefs délais</p>
+      </div>
+    </div>
+
+    <!-- Corps -->
+    <div class="form-body">
+
+      <div class="form-section-title">Vos informations personnelles</div>
+
+      <div class="form-grid-2">
+        <div class="fg">
+          <label>Nom <span>*</span></label>
+          <div class="input-box">
+            <input type="text" id="f-nom" placeholder="Votre nom" autocomplete="family-name"/>
+            <svg class="fi" viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z"/></svg>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Prénom <span>*</span></label>
+          <div class="input-box">
+            <input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="given-name"/>
+            <svg class="fi" viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="fg">
+          <label>Téléphone <span>*</span></label>
+          <div class="input-box">
+            <input type="tel" id="f-tel" placeholder="0XXX XXX XXX" autocomplete="tel"/>
+            <svg class="fi" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Âge <span>*</span></label>
+          <div class="input-box">
+            <input type="number" id="f-age" placeholder="Votre âge" min="1" max="120"/>
+            <svg class="fi" viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section-title">Type de service</div>
+
+      <!-- Select caché -->
+      <select id="f-service">
+        <option value="" disabled selected></option>
+        <option value="Prélèvement à domicile">Prélèvement à domicile</option>
+        <option value="Soin à domicile">Soin à domicile</option>
+        <option value="Bilan complet">Bilan complet</option>
+        <option value="Injection / Perfusion">Injection / Perfusion</option>
+        <option value="Pansement">Pansement</option>
+        <option value="Autre">Autre</option>
+      </select>
+
+      <!-- Dropdown custom -->
+      <div class="fg">
+        <label>Service demandé <span>*</span></label>
+        <div class="cs-wrap" id="csWrap">
+          <div class="cs-trigger placeholder" id="csTrigger" onclick="toggleCS()">
+            <svg class="cs-left-icon" viewBox="0 0 24 24"><path d="M19.8 18.4L14 10.67V6.5l1.35-1.69c.26-.33.03-.81-.39-.81H9.04c-.42 0-.65.48-.39.81L10 6.5v4.17L4.2 18.4c-.49.66-.02 1.6.8 1.6h14c.82 0 1.29-.94.8-1.6z"/></svg>
+            <span id="csTxt">Choisissez un service…</span>
+            <svg class="cs-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="cs-dropdown" id="csDrop">
+            <div class="cs-opt" onclick="pickSvc('Prélèvement à domicile','🩸','Prélèvement à domicile','Prise de sang chez vous',this)">
+              <div class="cs-opt-icon" style="background:#FEE2E2">🩸</div>
+              <div><div class="cs-opt-lbl">Prélèvement à domicile</div><div class="cs-opt-sub">Prise de sang chez vous</div></div>
+            </div>
+            <div class="cs-opt" onclick="pickSvc('Soin à domicile','🏠','Soin à domicile','Pansement, injection, perfusion',this)">
+              <div class="cs-opt-icon" style="background:#E8F8F2">🏠</div>
+              <div><div class="cs-opt-lbl">Soin à domicile</div><div class="cs-opt-sub">Pansement, injection, perfusion</div></div>
+            </div>
+            <div class="cs-opt" onclick="pickSvc('Bilan complet','🔬','Bilan complet','Glycémie, cholestérol, NFS…',this)">
+              <div class="cs-opt-icon" style="background:#EDE9FE">🔬</div>
+              <div><div class="cs-opt-lbl">Bilan complet</div><div class="cs-opt-sub">Glycémie, cholestérol, NFS…</div></div>
+            </div>
+            <div class="cs-opt" onclick="pickSvc('Injection / Perfusion','💉','Injection / Perfusion','Traitement prescrit à domicile',this)">
+              <div class="cs-opt-icon" style="background:#FEF9C3">💉</div>
+              <div><div class="cs-opt-lbl">Injection / Perfusion</div><div class="cs-opt-sub">Traitement prescrit à domicile</div></div>
+            </div>
+            <div class="cs-opt" onclick="pickSvc('Pansement','🩹','Pansement','Soins de plaie à domicile',this)">
+              <div class="cs-opt-icon" style="background:#FFE4E6">🩹</div>
+              <div><div class="cs-opt-lbl">Pansement</div><div class="cs-opt-sub">Soins de plaie à domicile</div></div>
+            </div>
+            <div class="cs-opt" onclick="pickSvc('Autre','📋','Autre service','Précisez lors du contact',this)">
+              <div class="cs-opt-icon" style="background:#F1F5F9">📋</div>
+              <div><div class="cs-opt-lbl">Autre service</div><div class="cs-opt-sub">Précisez lors du contact</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton WhatsApp -->
+      <button class="btn-wa" onclick="submitForm()">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.42A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+        Envoyer via WhatsApp
+      </button>
+
+      <p class="form-security">
+        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        Vos informations sont confidentielles et sécurisées
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     LOCALISATION — GOOGLE MAPS
+══════════════════════════════════ -->
+<section class="maps-section">
+  <div class="section-label">LOCALISATION</div>
+  <h2 class="section-title">Où nous trouver</h2>
+  <p class="section-sub">Laboratoire Dr. Hamzaoui — Analyses Assirem. Venez nous rendre visite ou réservez un déplacement à domicile.</p>
+
+  <div class="maps-wrapper">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3197.0301045220453!2d3.71782327583583!3d36.745848472262644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128e775d0740fddd%3A0x268eec264ebffae!2sLaboratoire%20Dr.Hamzaoui%20Analyses%20Assirem!5e0!3m2!1sfr!2sdz!4v1775829688927!5m2!1sfr!2sdz"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+
+    <!-- Infos rapides sous la carte -->
+    <div class="maps-info">
+      <div class="maps-info-row">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        Laboratoire Dr. Hamzaoui Analyses Assirem — Blida, Algérie
+      </div>
+      <div class="maps-info-row">
+        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        <a href="tel:0541875077">0793 06 83 44</a>
+      </div>
+      <div class="maps-info-row">
+        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+        Ouvert 7j/7 — Déplacement gratuit à domicile
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <div class="footer-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+    </div>
+    <div class="footer-logo-name">LABO MÉDICAL</div>
+  </div>
+  <p class="footer-desc">Laboratoire d'analyses médicales spécialisé dans les prélèvements et soins à domicile. Professionnel, rapide et avec déplacement gratuit.</p>
+  <div class="footer-links">
+    <a href="tel:0541875077" class="footer-link">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      0793 06 83 44
+    </a>
+    <a href="https://wa.me/213793068344" class="footer-link" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.42A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+      WhatsApp
+    </a>
+    <a href="#rdv" class="footer-link">
+      <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+      Prendre un rendez-vous
+    </a>
+  </div>
+  <hr class="footer-divider"/>
+  <p class="footer-copy">© 2026 Laboratoire Médical. Tous droits réservés.</p>
+</footer>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta">
+  <a href="tel:0541875077" class="sticky-btn sticky-call">
+    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+    Appeler
+  </a>
+  <a href="#rdv" class="sticky-btn sticky-rdv">
+    <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+    Rendez-vous
+  </a>
+</div>
+
+<script>
+// ── Scroll reveal ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.scroll-reveal,.scroll-reveal-left,.why-card,.step,.service-card')
+  .forEach((el, i) => { el.style.transitionDelay = (i * 0.07) + 's'; observer.observe(el); });
+
+// ── Custom select ──
+function toggleCS() {
+  document.getElementById('csWrap').classList.toggle('open');
+}
+function pickSvc(value, emoji, label, sub, el) {
+  document.getElementById('f-service').value = value;
+  const txt = document.getElementById('csTxt');
+  txt.textContent = emoji + '  ' + label;
+  const wrap = document.getElementById('csWrap');
+  wrap.classList.remove('open');
+  wrap.classList.add('has-val');
+  document.getElementById('csTrigger').classList.remove('placeholder');
+  document.getElementById('csTrigger').classList.add('has-val');
+  document.querySelectorAll('.cs-opt').forEach(o => o.classList.remove('picked'));
+  el.classList.add('picked');
+}
+document.addEventListener('click', function(e) {
+  const w = document.getElementById('csWrap');
+  if (w && !w.contains(e.target)) w.classList.remove('open');
+});
+
+// ── Submit WhatsApp ──
+function submitForm() {
+  const fields = ['f-nom','f-prenom','f-tel','f-age'];
+  const vals = fields.map(id => ({ id, v: document.getElementById(id).value.trim() }));
+  const service = document.getElementById('f-service').value;
+  let ok = true;
+
+  vals.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (!f.v) {
+      el.style.borderColor = '#ef4444'; el.style.background = '#fff5f5';
+      setTimeout(() => { el.style.borderColor = ''; el.style.background = ''; }, 2500);
+      ok = false;
+    }
+  });
+  if (!service) {
+    const t = document.getElementById('csTrigger');
+    t.style.borderColor = '#ef4444'; t.style.background = '#fff5f5';
+    setTimeout(() => { t.style.borderColor = ''; t.style.background = ''; }, 2500);
+    ok = false;
+  }
+  if (!ok) return;
+
+  const [nom, prenom, tel, age] = vals.map(f => f.v);
+  const msg = encodeURIComponent(
+`🏥 *Nouvelle Demande de Rendez-vous*
+━━━━━━━━━━━━━━━━━
+👤 *Nom :* ${nom} ${prenom}
+📞 *Téléphone :* ${tel}
+🎂 *Âge :* ${age} ans
+🩺 *Service :* ${service}
+━━━━━━━━━━━━━━━━━
+📍 Via le site web`
+  );
+
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+  setTimeout(() => { window.open('https://wa.me/213793068344?text=' + msg, '_blank'); }, 600);
+}
+
+// ── Sticky hide near form ──
+const stickyCta = document.querySelector('.sticky-cta');
+const rdvObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    stickyCta.style.opacity = e.isIntersecting ? '0' : '1';
+    stickyCta.style.pointerEvents = e.isIntersecting ? 'none' : 'all';
+  });
+}, { threshold: 0.3 });
+rdvObs.observe(document.getElementById('rdv'));
+stickyCta.style.transition = 'opacity .3s';
+</script>
+</body>
+</html>
